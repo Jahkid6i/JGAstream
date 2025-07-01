@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JGAStream- Download</title>
+
+<style>
+  :root {
+  --bg: #0b0f24;
+  --primary: #ff0055;
+  --text-light: #eee;
+  --card-bg: rgba(30, 30, 30, 0.85);
+  --shadow: rgba(0, 0, 0, 0.7);
+  --glow: 0 0 8px var(--primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--text-light);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  background: #000;
+}
+
+/* Galaxy Gradient Animated Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+  background-size: 600% 600%;
+  
+  z-index: -1;
+  opacity: 0.9;
+  background-image: url('user_bg.jpg');
+background-size: cover;
+background-blend-mode: overlay;
+}
+
+@keyframes galaxyShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+header {
+  background: rgba(10, 10, 10, 0.9);
+  padding: 1rem 1.5rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+  user-select: none;
+  box-shadow: 0 2px 6px var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+header nav {
+  margin-top: 0.5rem;
+}
+
+header nav a {
+  margin: 0 0.8rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+header nav a:hover {
+  color: var(--primary);
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  padding: 1rem 1rem 3rem;
+}
+
+#searchBar {
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  background: #1a1a1a;
+  color: var(--text-light);
+  box-shadow: inset 0 0 6px var(--primary);
+  transition: 0.3s;
+}
+
+#searchInput:focus {
+  box-shadow: 0 0 10px var(--primary);
+}
+
+#tabs {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#tabs button {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+#tabs button.active {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+#contentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+}
+
+.card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px var(--primary);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-bottom: 2px solid var(--primary);
+}
+
+.card-content {
+  padding: 0.6rem 0.5rem 0.5rem;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.2rem 0;
+  color: #fff;
+}
+
+.card-type {
+  font-size: 0.75rem;
+  color: #ccc;
+}
+
+.downloads {
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 500;
+  margin-top: 0.3rem;
+}
+
+.btn-download {
+  background: transparent;
+  border: 1px solid var(--primary);
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-download:hover {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--glow);
+}
+
+#modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+#modalContent {
+  background: #1a1a1a;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 15px;
+  overflow-y: auto;
+  box-shadow: 0 0 20px var(--primary);
+  position: relative;
+  padding: 1rem 1rem 2rem;
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#modalClose {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 900;
+  user-select: none;
+}
+
+#modalTitle {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+
+#modalTrailer iframe {
+  width: 100%;
+  height: 360px;
+  border-radius: 8px;
+  border: none;
+}
+
+#modalDownloads {
+  margin-top: 1rem;
+}
+
+#modalDownloads h4 {
+  color: var(--text-light);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+#modalDownloads ul {
+  list-style: none;
+  padding-left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#modalDownloads li {
+  margin-bottom: 0.4rem;
+}
+
+#modalDownloads a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#modalDownloads a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  #modalContent {
+    max-height: 80vh;
+    padding: 0.5rem 0.7rem 1.5rem;
+  }
+  #modalTrailer iframe {
+    height: 200px;
+  }
+
+
+</style>
+
+</head>
+<body>
+
+  <header>
+    <h1>JGAStream </h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Movies</a>
+      <a href="#">Series</a>
+      <a href="#">Music</a>
+      <a href="#">Contact Us</a>
+      <a href="#">Become admin</a>
+    </nav>
+  </header>
+
+<main>
+  <div id="searchBar">
+    <input type="text" id="searchInput" placeholder="Search movies or series..." autocomplete="off" />
+  </div>
+
+  <div id="tabs">
+    <button class="active" id="tabTrending">Trending</button>
+    <button id="tabRecent">Recently Added</button>
+  </div>
+
+  <div id="contentGrid" aria-live="polite" aria-label="Movies and Series List">
+    <!-- Media cards injected here -->
+  </div>
+</main>
+
+<!-- Modal for Trailer + Download Links -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div id="modalContent">
+    <button id="modalClose" aria-label="Close modal">&times;</button>
+    <h2 id="modalTitle"></h2>
+    <div id="modalTrailer"></div>
+    <div id="modalDownloads">
+      <h4>Download Links:</h4>
+      <ul id="downloadList"></ul>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCJOb0p6KHwNXCFddQJJ1vk09oqozQjvNw",
+  authDomain: "jahkid6i-e51aa.firebaseapp.com",
+  projectId: "jahkid6i-e51aa",
+  storageBucket: "jahkid6i-e51aa.appspot.com",
+  messagingSenderId: "849738273147",
+  appId: "1:849738273147:web:bff891dd76502870a36dde",
+  measurementId: "G-70QFFJZWKQ",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Elements
+const searchInput = document.getElementById("searchInput");
+const contentGrid = document.getElementById("contentGrid");
+
+const tabTrending = document.getElementById("tabTrending");
+const tabRecent = document.getElementById("tabRecent");
+
+const modal = document.getElementById("modal");
+const modalClose = document.getElementById("modalClose");
+const modalTitle = document.getElementById("modalTitle");
+const modalTrailer = document.getElementById("modalTrailer");
+const downloadList = document.getElementById("downloadList");
+
+let mediaData = [];
+let filteredData = [];
+let currentTab = "trending";
+const ninetyTwoHoursMs = 92 * 60 * 60 * 1000;
+
+// --- Load media from Firestore ---
+function subscribeMedia() {
+  const mediaRef = collection(db, "media");
+  const q = query(mediaRef, orderBy("timestamp", "desc"));
+  onSnapshot(q, (snapshot) => {
+    mediaData = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      timestamp: doc.data().timestamp?.toDate?.() || new Date(0),
+      downloads: doc.data().downloads || 0,
+    }));
+    filterAndRender();
+  });
+}
+
+// --- Filter & Render ---
+function filterAndRender() {
+  const searchVal = searchInput.value.trim().toLowerCase();
+  filteredData = mediaData.filter((m) => {
+    const match = m.title.toLowerCase().includes(searchVal);
+    if (!match) return false;
+
+    if (currentTab === "recent") {
+      const limit = new Date(Date.now() - ninetyTwoHoursMs);
+      return m.timestamp >= limit;
+    }
+    return true;
+  });
+
+  if (currentTab === "trending") {
+    filteredData.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+  } else {
+    filteredData.sort((a, b) => b.timestamp - a.timestamp);
+  }
+
+  renderGrid(filteredData);
+}
+
+// --- Render Media Cards ---
+function renderGrid(list) {
+  contentGrid.innerHTML = "";
+  if (list.length === 0) {
+    contentGrid.innerHTML = `<p style="color:#aaa; text-align:center;">No content found.</p>`;
+    return;
+  }
+
+  list.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const img = document.createElement("img");
+    img.src = item.posterUrl || "https://via.placeholder.com/300x450?text=No+Image";
+    img.alt = item.title;
+
+    const content = document.createElement("div");
+    content.className = "card-content";
+
+    const title = document.createElement("h3");
+    title.className = "card-title";
+    title.textContent = item.title;
+
+    const type = document.createElement("p");
+    type.className = "card-type";
+    type.textContent = item.type.charAt(0).toUpperCase() + item.type.slice(1);
+
+    const downloads = document.createElement("p");
+    downloads.className = "downloads";
+    downloads.textContent = `Downloads: ${item.downloads || 0}`;
+
+    const btn = document.createElement("button");
+    btn.className = "btn-download";
+    btn.textContent = "Details / Download";
+    btn.addEventListener("click", async () => await openModal(item));
+
+    content.append(title, type, downloads, btn);
+    card.append(img, content);
+    contentGrid.appendChild(card);
+  });
+}
+
+// --- Open Modal ---
+async function openModal(item) {
+  modalTitle.textContent = item.title;
+  modalTrailer.innerHTML = "";
+
+  // Fetch YouTube trailer if not present
+  let trailerUrl = item.trailer;
+  if (!trailerUrl) {
+    const videoId = await fetchYouTubeTrailer(item.title);
+    trailerUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+  }
+
+  if (trailerUrl) {
+    const iframe = document.createElement("iframe");
+    iframe.src = trailerUrl;
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    modalTrailer.appendChild(iframe);
+  } else {
+    modalTrailer.textContent = "No trailer available.";
+  }
+
+  // Downloads
+  downloadList.innerHTML = "";
+  if (item.type === "movie" && Array.isArray(item.urls)) {
+    item.urls.forEach((url, i) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.textContent = `Download Link ${i + 1}`;
+      a.addEventListener("click", () => incrementDownloadCount(item.id));
+      li.appendChild(a);
+      downloadList.appendChild(li);
+    });
+  } else if (item.type === "series" && Array.isArray(item.seasons)) {
+    item.seasons.forEach((seasonObj, i) => {
+      const header = document.createElement("li");
+      header.textContent = `▶️ Season ${seasonObj.season || i + 1}`;
+      header.style.fontWeight = "700";
+      header.style.marginTop = "0.5rem";
+      header.style.cursor = "pointer";
+
+      const container = document.createElement("ul");
+      container.style.marginLeft = "1rem";
+      container.style.display = "none";
+
+      header.addEventListener("click", () => {
+        container.style.display = container.style.display === "none" ? "block" : "none";
+      });
+
+      seasonObj.episodes.forEach((ep, j) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = ep;
+        a.target = "_blank";
+        a.textContent = `Episode ${j + 1}`;
+        a.addEventListener("click", () => incrementDownloadCount(item.id));
+        li.appendChild(a);
+        container.appendChild(li);
+      });
+
+      downloadList.appendChild(header);
+      downloadList.appendChild(container);
+    });
+  } else {
+    const li = document.createElement("li");
+    li.textContent = "No download links available.";
+    downloadList.appendChild(li);
+  }
+
+  modal.style.display = "flex";
+}
+
+// --- YouTube Trailer Fetch ---
+async function fetchYouTubeTrailer(title) {
+  const apiKey = "AIzaSyDSe0mAeQHwvtY1M_rufR7Hl_uiQ7kbnuI";
+  const query = encodeURIComponent(`${title} official trailer`);
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${query}&key=${apiKey}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.items?.[0]?.id?.videoId || null;
+  } catch (err) {
+    console.error("YouTube fetch error:", err);
+    return null;
+  }
+}
+
+// --- Increment Downloads ---
+async function incrementDownloadCount(id) {
+  try {
+    const docRef = doc(db, "media", id);
+    const item = mediaData.find((m) => m.id === id);
+    const newCount = (item.downloads || 0) + 1;
+    await updateDoc(docRef, { downloads: newCount });
+    item.downloads = newCount;
+    filterAndRender();
+  } catch (e) {
+    console.error("Failed to update count", e);
+  }
+}
+
+// --- Event Listeners ---
+modalClose.addEventListener("click", () => {
+  modal.style.display = "none";
+  modalTrailer.innerHTML = "";
+  downloadList.innerHTML = "";
+});
+
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+    modalTrailer.innerHTML = "";
+    downloadList.innerHTML = "";
+  }
+});
+
+tabTrending.addEventListener("click", () => {
+  currentTab = "trending";
+  tabTrending.classList.add("active");
+  tabRecent.classList.remove("active");
+  filterAndRender();
+});
+
+tabRecent.addEventListener("click", () => {
+  currentTab = "recent";
+  tabRecent.classList.add("active");
+  tabTrending.classList.remove("active");
+  filterAndRender();
+});
+
+searchInput.addEventListener("input", filterAndRender);
+
+// --- Load Media Initially ---
+subscribeMedia();
+</script>
+
+</body>
+</html>

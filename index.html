@@ -52,7 +52,6 @@ body::before {
   
   z-index: -1;
   opacity: 0.9;
-  background-image: url('user_bg.jpg');
 background-size: cover;
 background-blend-mode: overlay;
 }
@@ -318,7 +317,7 @@ main {
   text-decoration: underline;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   #modalContent {
     max-height: 80vh;
     padding: 0.5rem 0.7rem 1.5rem;
@@ -326,6 +325,9 @@ main {
   #modalTrailer iframe {
     height: 200px;
   }
+}
+
+/* This should be outside any @media block */
 .menu-icon {
   display: none;
   font-size: 1.8rem;
@@ -821,4 +823,4 @@ contactForm.addEventListener("submit", async (e) => {
 </script>
 
 </body>
-  </html>
+                                                              </html>

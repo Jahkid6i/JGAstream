@@ -441,13 +441,49 @@ main {
   color: var(--primary);
   cursor: pointer;
 }
+@media (max-width: 480px) {
+  #contentGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .card img {
+    height: 150px;
+  }
+
+  .card-title {
+    font-size: 0.75rem;
+  }
+
+  .card-type,
+  .downloads,
+  .btn-download {
+    font-size: 0.7rem;
+  }
+
+  .btn-download {
+    padding: 0.2rem 0.4rem;
+    margin-top: 0.3rem;
+  }
+
+  .card-content {
+    padding: 0.4rem;
+  }
+}
 </style>
 
 </head>
 <body>
 
   <header>
-    <h1>JGAStream </h1>
+    <svg width="180" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
+  <text x="0" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="#007bff">
+    JGA
+  </text>
+  <text x="70" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="white">
+    Stream
+  </text>
+</svg>
     <div id="menuToggle" class="menu-icon">
   ☰
 </div>
@@ -585,7 +621,7 @@ function filterAndRender() {
 function renderGrid(list) {
   contentGrid.innerHTML = "";
   if (list.length === 0) {
-    contentGrid.innerHTML = `<p style="color:#aaa; text-align:center;">No content found.</p>`;
+    contentGrid.innerHTML = `<p style="color:#aaa; text-align:center;">Refresh to load.</p>`;
     return;
   }
 
@@ -610,7 +646,7 @@ function renderGrid(list) {
 
     const btn = document.createElement("button");
     btn.className = "btn-download";
-    btn.textContent = "Details / Download";
+    btn.textContent = "Download here";
     btn.addEventListener("click", async () => await openModal(item));
 
     content.append(title, type, btn);
@@ -675,7 +711,7 @@ async function openModal(item) {
         const a = document.createElement("a");
         a.href = ep;
         a.target = "_blank";
-        a.textContent = `Episode ${j + 1}`;
+        a.textContent = `Download Episode ${j + 1}`;
         a.addEventListener("click", () => incrementDownloadCount(item.id));
         li.appendChild(a);
         container.appendChild(li);
@@ -821,6 +857,7 @@ contactForm.addEventListener("submit", async (e) => {
 });
 
 </script>
-
-</body>
-  </html>
+...<!-- Linkvertise script -->
+<script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+<script>
+  // Activate Lin

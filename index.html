@@ -680,46 +680,69 @@ async function openModal(item) {
   // Downloads
   downloadList.innerHTML = "";
   if (item.type === "movie" && Array.isArray(item.urls)) {
-    item.urls.forEach((url, i) => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = url;
+  item.urls.forEach((url, i) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+
+    if (url && url.trim() !== "") {
+      const encoded = encodeURIComponent(url);
+      const monetizedLink = `https://linkvertise.com/1368186/dynamic?r=${encoded}`;
+      a.href = monetizedLink;
       a.target = "_blank";
       a.textContent = `Download Link ${i + 1}`;
       a.addEventListener("click", () => incrementDownloadCount(item.id));
-      li.appendChild(a);
-      downloadList.appendChild(li);
+    } else {
+      a.href = "#";
+      a.textContent = "Download link unavailable";
+      a.style.pointerEvents = "none";
+    }
+
+    li.appendChild(a);
+    downloadList.appendChild(li);
+  });
+    }
+
+    } else if (item.type === "series" && Array.isArray(item.seasons)) {
+  item.seasons.forEach((seasonObj, i) => {
+    const header = document.createElement("li");
+    header.textContent = `▶️ Season ${seasonObj.season || i + 1}`;
+    header.style.fontWeight = "700";
+    header.style.marginTop = "0.5rem";
+    header.style.cursor = "pointer";
+
+    const container = document.createElement("ul");
+    container.style.marginLeft = "1rem";
+    container.style.display = "none";
+
+    header.addEventListener("click", () => {
+      container.style.display = container.style.display === "none" ? "block" : "none";
     });
-  } else if (item.type === "series" && Array.isArray(item.seasons)) {
-    item.seasons.forEach((seasonObj, i) => {
-      const header = document.createElement("li");
-      header.textContent = `▶️ Season ${seasonObj.season || i + 1}`;
-      header.style.fontWeight = "700";
-      header.style.marginTop = "0.5rem";
-      header.style.cursor = "pointer";
 
-      const container = document.createElement("ul");
-      container.style.marginLeft = "1rem";
-      container.style.display = "none";
+    seasonObj.episodes.forEach((ep, j) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
 
-      header.addEventListener("click", () => {
-        container.style.display = container.style.display === "none" ? "block" : "none";
-      });
-
-      seasonObj.episodes.forEach((ep, j) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = ep;
+      if (ep && ep.trim() !== "") {
+        const encoded = encodeURIComponent(ep);
+        const monetizedLink = `https://linkvertise.com/1368186/dynamic?r=${encoded}`;
+        a.href = monetizedLink;
         a.target = "_blank";
         a.textContent = `Download Episode ${j + 1}`;
         a.addEventListener("click", () => incrementDownloadCount(item.id));
-        li.appendChild(a);
-        container.appendChild(li);
-      });
+      } else {
+        a.href = "#";
+        a.textContent = "Download link unavailable";
+        a.style.pointerEvents = "none";
+      }
 
-      downloadList.appendChild(header);
-      downloadList.appendChild(container);
+      li.appendChild(a);
+      container.appendChild(li);
     });
+
+    downloadList.appendChild(header);
+    downloadList.appendChild(container);
+  });
+                                     }      
   } else {
     const li = document.createElement("li");
     li.textContent = "No download links available.";
@@ -857,7 +880,6 @@ contactForm.addEventListener("submit", async (e) => {
 });
 
 </script>
-...<!-- Linkvertise script -->
-<script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-<script>
-  // Activate Lin
+
+</body>
+</html>

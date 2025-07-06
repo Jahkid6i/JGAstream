@@ -1,9 +1,32 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>JGAStream- Download</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JGAStream - Download Latest Movies & Series</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Watch and download trending movies and series for free on JGAStream. Updated daily with new content.">
+  <meta name="keywords" content="JGAStream, free movies, download series, latest movies, HD movies, trending films, TV shows, Nollywood, Bollywood, Hollywood">
+  <meta name="author" content="JGAStream Team">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph (for Facebook, LinkedIn, etc.) -->
+  <meta property="og:title" content="JGAStream - Download Latest Movies & Series">
+  <meta property="og:description" content="Explore a vast library of trending movies and TV shows. Watch or download for free. No sign-up needed!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jahkid6i.github.io/jgastream/">
+  <meta property="og:image" content="https://res.cloudinary.com/demo/image/upload/v1691234567/jgastream-poster.jpg"> <!-- Replace with your actual image URL -->
+
+  <!-- Twitter Card Meta -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JGAStream - Download Latest Movies & Series">
+  <meta name="twitter:description" content="Watch and download trending movies and TV shows for free with JGAStream. Updated daily.">
+  <meta name="twitter:image" content="https://res.cloudinary.com/demo/image/upload/v1691234567/jgastream-poster.jpg"> <!-- Replace with same image -->
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://res.cloudinary.com/demo/image/upload/v1691234567/favicon.png" type="image/png"> <!-- Replace with your favicon URL -->
+
 
 <style>
   :root {
@@ -14,6 +37,7 @@
   --header-bg: rgba(240, 240, 240, 0.9);
   --shadow: rgba(0, 0, 0, 0.1);
   --glow: 0 0 8px var(--primary);
+  --text-light: #555; 
 }
 
 body[data-theme='dark'] {
@@ -23,6 +47,8 @@ body[data-theme='dark'] {
   --card-bg: rgba(30, 30, 30, 0.85);
   --header-bg: rgba(10, 10, 10, 0.9);
   --shadow: rgba(0, 0, 0, 0.7);
+  --text-light: #ccc;
+  
 }
 
 * {
@@ -507,6 +533,8 @@ main {
     Stream
   </text>
 </svg>
+<button id="themeToggle" style="position:absolute;left:1.5rem;top:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:white;" aria-label="Toggle Theme">🌙</button>
+    
     <div id="menuToggle" class="menu-icon">
   ☰
 </div>
@@ -910,6 +938,27 @@ contactForm.addEventListener("submit", async (e) => {
   }
 });
 
+  // Theme Toggle
+const themeToggle = document.getElementById("themeToggle");
+const userPref = localStorage.getItem("theme");
+
+if (userPref === "dark") {
+  document.body.setAttribute("data-theme", "dark");
+  themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", () => {
+  const currentTheme = document.body.getAttribute("data-theme");
+  if (currentTheme === "dark") {
+    document.body.removeAttribute("data-theme");
+    localStorage.setItem("theme", "light");
+    themeToggle.textContent = "🌙";
+  } else {
+    document.body.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+    themeToggle.textContent = "☀️";
+  }
+});
 </script>
 
 <!-- Adsterra Popunder -->

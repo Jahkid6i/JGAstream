@@ -469,6 +469,30 @@ main {
     padding: 0.4rem;
   }
 }
+.adsterra-banner-zone {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.banner-desktop {
+  display: block;
+}
+
+.banner-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .banner-desktop {
+    display: none;
+  }
+
+  .banner-mobile {
+    display: block;
+  }
+    }
+  
 </style>
 
 </head>
@@ -500,6 +524,37 @@ main {
     <input type="text" id="searchInput" placeholder="Search movies or series..." autocomplete="off" />
   </div>
 
+ <!-- Responsive Adsterra Banners (desktop + mobile) -->
+<div class="adsterra-banner-zone">
+  <!-- Desktop banner (728x90) -->
+  <div class="banner-desktop">
+    <script type="text/javascript">
+      atOptions = {
+        'key': 'c10e70aae6981f6f2aa504d8161c413e',
+        'format': 'iframe',
+        'height': 90,
+        'width': 728,
+        'params': {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/c10e70aae6981f6f2aa504d8161c413e/invoke.js"></script>
+  </div>
+
+  <!-- Mobile banner (300x250) -->
+  <div class="banner-mobile">
+    <script type="text/javascript">
+      atOptions = {
+        'key': '8de3cb605ffcbd37025229b01ebd6a36',
+        'format': 'iframe',
+        'height': 250,
+        'width': 300,
+        'params': {}
+      };
+    </script>
+    <script type="text/javascript" src="//www.highperformanceformat.com/8de3cb605ffcbd37025229b01ebd6a36/invoke.js"></script>
+  </div>
+</div>
+  
   <div id="tabs">
     <button class="active" id="tabTrending">Trending</button>
     <button id="tabRecent">Recently Added</button>

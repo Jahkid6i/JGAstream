@@ -682,7 +682,7 @@ async function openModal(item) {
     item.urls.forEach((url, i) => {
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = `https://linkvertise.com/1368186/dynamic?r=${encodeURIComponent(url)}`;
+      a.href = url;
       a.target = "_blank";
       a.textContent = `Download Link ${i + 1}`;
       a.addEventListener("click", () => incrementDownloadCount(item.id));
@@ -704,20 +704,17 @@ async function openModal(item) {
       header.addEventListener("click", () => {
         container.style.display = container.style.display === "none" ? "block" : "none";
       });
-    seasonObj.episodes.forEach((ep, j) => {
-     const li = document.createElement("li");
-     const a = document.createElement("a");
 
-     const encodedEp = encodeURIComponent(ep);
-     a.href = `https://linkvertise.com/1368186/dynamic?r=${encodedEp}`;
-
-     a.target = "_blank";
-     a.textContent = `Download Episode ${j + 1}`;
-     a.addEventListener("click", () => incrementDownloadCount(item.id));
-     li.appendChild(a);
-     container.appendChild(li);
-     });
-      
+      seasonObj.episodes.forEach((ep, j) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = ep;
+        a.target = "_blank";
+        a.textContent = `Download Episode ${j + 1}`;
+        a.addEventListener("click", () => incrementDownloadCount(item.id));
+        li.appendChild(a);
+        container.appendChild(li);
+      });
 
       downloadList.appendChild(header);
       downloadList.appendChild(container);
@@ -859,5 +856,9 @@ contactForm.addEventListener("submit", async (e) => {
 });
 
 </script>
+
+<!-- Adsterra Popunder -->
+<script type='text/javascript' src='//pl27090726.profitableratecpm.com/e7/78/1d/e7781d27f149e0d26a98ff897ec7d868.js'></script>
 </body>
-  </html>
+</html>
+ 

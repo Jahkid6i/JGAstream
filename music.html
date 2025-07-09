@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JGAStream - Music</title>
+  <link rel="stylesheet" href="music.css" />
+</head>
+<body>
+  <header>JGAStream Music</header>
+  <!-- Desktop Banner (728x90) -->
+<div class="ad-desktop">
+  <script type="text/javascript">
+    atOptions = {
+      'key': 'c10e70aae6981f6f2aa504d8161c413e',
+      'format': 'iframe',
+      'height': 90,
+      'width': 728,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/c10e70aae6981f6f2aa504d8161c413e/invoke.js"></script>
+</div>
+
+<!-- Tablet Banner (468x60) -->
+<div class="ad-tablet">
+  <script type="text/javascript">
+    atOptions = {
+      'key': '23abe0a621be4ea8ad3e6d90e5dea64d',
+      'format': 'iframe',
+      'height': 60,
+      'width': 468,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/23abe0a621be4ea8ad3e6d90e5dea64d/invoke.js"></script>
+</div>
+
+<!-- Mobile Banner (320x50) -->
+<div class="ad-mobile">
+  <script type="text/javascript">
+    atOptions = {
+      'key': '748ee82beb1358313ab2124c782e22ae',
+      'format': 'iframe',
+      'height': 50,
+      'width': 320,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/748ee82beb1358313ab2124c782e22ae/invoke.js"></script>
+</div>
+
+<style>
+  /* Hide all ads by default */
+  .ad-desktop, .ad-tablet, .ad-mobile {
+    display: none;
+    justify-content: center;
+    margin: 15px 0;
+  }
+
+  /* Desktop (large screens) */
+  @media (min-width: 1025px) {
+    .ad-desktop { display: flex; }
+  }
+
+  /* Tablet screens */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .ad-tablet { display: flex; }
+  }
+
+  /* Mobile devices */
+  @media (max-width: 768px) {
+    .ad-mobile { display: flex; }
+  }
+</style>
+  <div class="music-container" id="musicContainer">
+    <p>Loading music...</p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJOb0p6KHwNXCFddQJJ1vk09oqozQjvNw",
+      authDomain: "jahkid6i-e51aa.firebaseapp.com",
+      projectId: "jahkid6i-e51aa",
+      storageBucket: "jahkid6i-e51aa.appspot.com",
+      messagingSenderId: "849738273147",
+      appId: "1:849738273147:web:bff891dd76502870a36dde"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const musicContainer = document.getElementById("musicContainer");
+
+    async function loadMusic() {
+      const q = query(collection(db, "media"), where("type", "==", "music"));
+      const querySnapshot = await getDocs(q);
+      musicContainer.innerHTML = "";
+
+      if (querySnapshot.empty) {
+        musicContainer.innerHTML = "<p>No music found.</p>";
+        return;
+      }
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const embeddedLink = data.urls?.[0] || "";
+        const downloadLink = data.urls?.[1] || "";
+
+        const card = document.createElement("div");
+        card.className = "music-card";
+
+        const img = document.createElement("img");
+        img.src = data.posterUrl || "https://via.placeholder.com/180";
+
+        const title = document.createElement("div");
+        title.className = "music-title";
+        title.textContent = data.title || "Untitled Music";
+
+        const artist = document.createElement("div");
+        artist.className = "music-artist";
+        artist.textContent = data.artist || "Unknown Artist";
+
+        // Player: either embed or audio
+        let player;
+        if (
+          embeddedLink.includes("spotify") ||
+          embeddedLink.includes("mdundo") ||
+          embeddedLink.includes("audiomack") ||
+          embeddedLink.includes("iframe") ||
+          !embeddedLink.match(/\.(mp3|ogg)$/i)
+        ) {
+          // Treat as web embed
+          player = document.createElement("iframe");
+          player.src = embeddedLink;
+          player.height = "150";
+          player.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+          player.allowFullscreen = true;
+        } else {
+          // Treat as direct audio file
+          player = document.createElement("audio");
+          player.controls = true;
+          player.src = embeddedLink;
+        }
+
+        const controls = document.createElement("div");
+        controls.className = "music-controls";
+
+        const downloadBtn = document.createElement("a");
+        downloadBtn.href = downloadLink;
+        downloadBtn.textContent = "Download";
+        downloadBtn.target = "_blank";
+
+        const shareBtn = document.createElement("button");
+        shareBtn.textContent = "Share";
+        shareBtn.onclick = () => {
+          if (navigator.share) {
+            navigator.share({
+              title: data.title || "Listen to this track",
+              text: `Check out "${data.title}" by ${data.artist || "unknown"} on JGAStream.`,
+              url: window.location.href
+            }).catch(console.error);
+          } else {
+            alert("Sharing not supported on this device.");
+          }
+        };
+
+        controls.appendChild(downloadBtn);
+        controls.appendChild(shareBtn);
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(artist);
+        card.appendChild(player);
+        card.appendChild(controls);
+
+        musicContainer.appendChild(card);
+      });
+    }
+
+    loadMusic();
+  </script>
+  
+</body>
+</html>

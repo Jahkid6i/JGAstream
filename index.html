@@ -1,969 +1,339 @@
- <!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en">
+  <!-- Head -->
+  <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>JGAStream - Download Latest Movies & Series</title>
-
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Watch and download trending movies and series for free on JGAStream. Updated daily with new content.">
-  <meta name="keywords" content="JGAStream, free movies, download series, latest movies, HD movies, trending films, TV shows, Nollywood, Bollywood, Hollywood">
-  <meta name="author" content="JGAStream Team">
-  <meta name="robots" content="index, follow">
-
-  
-  <meta property="og:title" content="JGAStream - Download Latest Movies & Series">
-  <meta property="og:description" content="Explore a vast library of trending movies and TV shows. Watch or download for free. No sign-up needed!">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://jahkid6i.github.io/jgastream/">
-  <meta property="og:image" content="https://res.cloudinary.com/dqngoh1gx/image/upload/file_000000007aa461f9a53743625a3f2754_rs8wo6.png">
-
-  <!-- Twitter Card Meta -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="JGAStream - Download Latest Movies & Series">
-  <meta name="twitter:description" content="Watch and download trending movies and TV shows for free with JGAStream. Updated daily.">
-  <meta name="twitter:image" content="https://res.cloudinary.com/dqngoh1gx/image/upload/file_000000007aa461f9a53743625a3f2754_rs8wo6.png"> 
-
-  <!-- Favicon -->
-  <link rel="icon" href="https://res.cloudinary.com/dqngoh1gx/image/upload/file_000000007aa461f9a53743625a3f2754_rs8wo6.png"> 
-
-
-<style>
-  :root {
-  --primary: #007bff;
-  --text-color: #000;
-  --bg-color: #fff;
-  --card-bg: #f9f9f9;
-  --header-bg: rgba(240, 240, 240, 0.9);
-  --shadow: rgba(0, 0, 0, 0.1);
-  --glow: 0 0 8px var(--primary);
-  --text-light: #555; 
-}
-
-body[data-theme='dark'] {
-  --primary: #007bff;
-  --text-color: #eee;
-  --bg-color: #000;
-  --card-bg: rgba(30, 30, 30, 0.85);
-  --header-bg: rgba(10, 10, 10, 0.9);
-  --shadow: rgba(0, 0, 0, 0.7);
-  --text-light: #ccc;
-  
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
-  background: var(--bg-color);
-  color: var(--text-color);
-}
-
-/* Galaxy Gradient Animated Background */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: white;
-  background-size: 600% 600%;
-  z-index: -1;
-  opacity: 0.9;
-background-size: cover;
-background-blend-mode: overlay;
-}
-
-@keyframes galaxyShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-header {
-  background: var(--primary);
-  padding: 1rem 1.5rem;
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-align: center;
-  user-select: none;
-  box-shadow: 0 2px 6px var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 999;
-}
-
-header nav {
-  margin-top: 0.5rem;
-}
-
-header nav a {
-  margin: 0 0.8rem;
-  color: white;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: color 0.3s;
-}
-
-header nav a:hover {
-  color: var(--primary);
-}
-
-main {
-  flex: 1;
-  width: 100%;
-  padding: 1rem 1rem 3rem;
-}
-
-#searchBar {
-  max-width: 500px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  justify-content: center;
-}
-
-#searchInput {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  border: none;
-  font-size: 1rem;
-  outline: none;
-  background: #grey;
-  color: var(--text-light);
-  box-shadow: inset 0 0 6px var(--primary);
-  transition: 0.3s;
-}
-
-#searchInput:focus {
-  box-shadow: 0 0 10px var(--primary);
-}
-
-#tabs {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-#tabs button {
-  background: none;
-  border: none;
-  color: var(--text-light);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-#tabs button.active {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-#contentGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
-  padding: 1rem 0;
-}
-
-.card {
-  background: var(--card-bg);
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.3s;
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
-}
-
-.card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 15px var(--primary);
-}
-
-.card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-bottom: 2px solid var(--primary);
-}
-
-.card-content {
-  padding: 0.6rem 0.5rem 0.5rem;
-  text-align: center;
-}
-
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0.2rem 0;
-  color: var(--text-color);
-}
-
-.card-type {
-  font-size: 0.75rem;
-  color: #ccc;
-}
-
-.downloads {
-  font-size: 0.75rem;
-  color: var(--primary);
-  font-weight: 500;
-  margin-top: 0.3rem;
-}
-
-.btn-download {
-  background: transparent;
-  border: 1px solid var(--primary);
-  padding: 0.3rem 0.6rem;
-  border-radius: 10px;
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.btn-download:hover {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: var(--glow);
-}
-
-#modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 1rem;
-}
-
-#modalContent {
-  background: var(--card-bg);
-  max-width: 700px;
-  width: 100%;
-  max-height: 90vh;
-  border-radius: 15px;
-  overflow-y: auto;
-  box-shadow: 0 0 20px var(--primary);
-  position: relative;
-  padding: 1rem 1rem 2rem;
-  animation: popIn 0.3s ease;
-}
-
-@keyframes popIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-#modalClose {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: var(--primary);
-  cursor: pointer;
-  font-weight: 900;
-  user-select: none;
-}
-
-#modalTitle {
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 1.4rem;
-  margin-bottom: 0.8rem;
-  text-align: center;
-}
-
-#modalTrailer iframe {
-  width: 100%;
-  height: 360px;
-  border-radius: 8px;
-  border: none;
-}
-
-#modalDownloads {
-  margin-top: 1rem;
-}
-
-#modalDownloads h4 {
-  color: var(--text-light);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-#modalDownloads ul {
-  list-style: none;
-  padding-left: 0;
-  max-height: 200px;
-  overflow-y: auto;
-}
-#modalDownloads ul::-webkit-scrollbar {
-  width: 6px;
-}
-
-#modalDownloads ul::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
-
-#modalDownloads li {
-  margin-bottom: 0.4rem;
-}
-
-#modalDownloads a {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-#modalDownloads a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  #modalContent {
-    max-height: 80vh;
-    padding: 0.5rem 0.7rem 1.5rem;
-  }
-  #modalTrailer iframe {
-    height: 200px;
-  }
-}
-
-/* This should be outside any @media block */
-.menu-icon {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--primary);
-  position: absolute;
-  right: 1.5rem;
-  top: 1.2rem;
-  z-index: 1001;
-  user-select: none;
-}
-/* Responsive nav */
-@media (max-width: 768px) {
-  header nav {
-    position: fixed;
-    top: 0px;
-    right: -100%;
-    width: 60%;
-    height: calc(100% - 60px);
-    background: var(--primary);
-    display: flex;
-    flex-direction: column; 
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 1.5rem;
-    gap: 1.2rem;
-    transition: right 0.3s ease;
-  
-}
-  header nav.active {
-    right: 0;
-  }
-
-  .menu-icon {
-    display: block;
-    color: white;
-  }
-
-  header {
-    text-align: left;
-    padding-right: 4rem;
-  }
-
-  header nav a {
-    font-size: 1rem;
-    width: 100%;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid #ddd;
-    color: white;
-    text-decoration: none;
-  }
-}
-
-.contact-modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  justify-content: center;
-  align-items: center;
-}
-
-.contact-modal-content {
-  background: #fff;
-  color: #000;
-  padding: 1.5rem;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 12px;
-  position: relative;
-  box-shadow: 0 0 15px var(--primary);
-}
-
-.contact-modal-content h2 {
-  margin-top: 0;
-  text-align: center;
-  color: var(--primary);
-}
-
-.contact-modal-content input,
-.contact-modal-content textarea {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f5f5f5;
-  color: #000;
-  font-size: 1rem;
-}
-
-.contact-modal-content button[type="submit"] {
-  width: 100%;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.7rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-#closeContact {
-  position: absolute;
-  top: 10px; right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--primary);
-  cursor: pointer;
-}
-@media (max-width: 480px) {
-  #contentGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
-  }
-
-  .card img {
-    height: 150px;
-  }
-
-  .card-title {
-    font-size: 0.75rem;
-  }
-
-  .card-type,
-  .downloads,
-  .btn-download {
-    font-size: 0.7rem;
-  }
-
-  .btn-download {
-    padding: 0.2rem 0.4rem;
-    margin-top: 0.3rem;
-  }
-
-  .card-content {
-    padding: 0.4rem;
-  }
-}
-.adsterra-banner-zone {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-.banner-desktop {
-  display: block;
-}
-
-.banner-mobile {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .banner-desktop {
-    display: none;
-  }
-
-  .banner-mobile {
-    display: block;
-  }
+  <title>JGAStream - Download Movies, Series & Music Free</title>
+
+  <!-- Basic SEO -->
+  <meta name="description" content="Watch and download trending movies, series, and music for free on JGAStream. Daily updates in all genres—Action, Romance, Drama, and more." />
+  <meta name="keywords" content="JGAStream, free movies, download series, watch online, stream music, action movies, romantic series, free streaming, latest music" />
+  <meta name="author" content="JGAStream Team" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="JGAStream - Watch & Download Latest Movies, Series & Music" />
+  <meta property="og:description" content="Stream or download trending movies, TV shows, and music. 100% free and updated daily!" />
+  <meta property="og:url" content="https://jahkid6i.github.io/jgastream/" />
+  <meta property="og:image" content="https://res.cloudinary.com/dqngoh1gx/image/upload/rsz_2019_collage_poster_xfsheg.jpg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JGAStream - Download Movies, Series & Music Free" />
+  <meta name="twitter:description" content="Watch and download trending movies, series, and music for free. Updated daily with the best entertainment!" />
+  <meta name="twitter:image" content="https://res.cloudinary.com/dqngoh1gx/image/upload/rsz_2019_collage_poster_xfsheg.jpg" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://jahkid6i.github.io/jgastream/" />
+
+  <!-- Favicpn -->
+  <link rel="icon" href="https://jahkid6i.github.io/jgastream/favicon.ico" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "JGAStream",
+    "url": "https://jahkid6i.github.io/jgastream/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://jahkid6i.github.io/jgastream/?search={search_term_string}",
+      "query-input": "required name=search_term_string"
     }
-  
-</style>
+  }
+  </script>
 
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
 
+<body data-theme="light">
   <header>
     <svg width="180" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
-  <text x="0" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="rgba(0,0,0,0.592)">
-    JGA
-  </text>
-  <text x="70" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="white">
-    Stream
-  </text>
-</svg>
-
-    <div id="menuToggle" class="menu-icon">
-  ☰
-</div>
-   <button id="themeToggle" style="position:absolute;left:1.5rem;top:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:white;" aria-label="Toggle Theme">🌙</button>
-    
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Movies</a>
-      <a href="#">Series</a>
-      <a href="#" id="openContact">Request movie/series</a>
-     
+      <text x="0" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="rgba(0,0,0,0.592)">JGA</text>
+      <text x="70" y="28" font-family="Segoe UI, sans-serif" font-size="28" font-weight="bold" fill="white">Stream</text>
+    </svg>
+    <div id="menuToggle" class="menu-icon">☰</div>
+    <nav id="navLinks">
+      <a href="#" id="filterAll">Home</a>
+      <a href="#" id="filterMovies">Movies</a>
+      <a href="#" id="filterSeries">Series</a>
+      <a href="#" id="filterMusic">Music</a>
+      <a href="contact.html">Request</a>
+      <a href="about.html">About Us</a>
     </nav>
-  </header>
-
-<main>
-  <div id="searchBar">
-    <input type="text" id="searchInput" placeholder="Search movies or series..." autocomplete="off" />
-  </div>
-
- <!-- Responsive Adsterra Banners (desktop + mobile) -->
-<div class="adsterra-banner-zone">
-  <!-- Desktop banner (728x90) -->
-  <div class="banner-desktop">
-    <script type="text/javascript">
-      atOptions = {
-        'key': 'c10e70aae6981f6f2aa504d8161c413e',
-        'format': 'iframe',
-        'height': 90,
-        'width': 728,
-        'params': {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/c10e70aae6981f6f2aa504d8161c413e/invoke.js"></script>
-  </div>
-
-  <!-- Mobile banner (300x250) -->
-  <div class="banner-mobile">
-    <script type="text/javascript">
-      atOptions = {
-        'key': '8de3cb605ffcbd37025229b01ebd6a36',
-        'format': 'iframe',
-        'height': 250,
-        'width': 300,
-        'params': {}
-      };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/8de3cb605ffcbd37025229b01ebd6a36/invoke.js"></script>
-  </div>
+  </header>  <main>
+    <div id="searchBar">
+      <input type="text" id="searchInput" placeholder="Search..." autocomplete="off" />
+    </div><div id="tabs">
+  <button class="active" id="tabTrending">Trending</button>
+  <button id="tabRecent">Recently Added</button>
 </div>
-  
-  <div id="tabs">
-    <button class="active" id="tabTrending">Trending</button>
-    <button id="tabRecent">Recently Added</button>
-  </div>
 
-  <div id="contentGrid" aria-live="polite" aria-label="Movies and Series List">
-    <!-- Media cards injected here -->
-  </div>
-</main>
-
-<!-- Modal for Trailer + Download Links -->
-<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div id="modalContent">
-    <button id="modalClose" aria-label="Close modal">&times;</button>
-    <h2 id="modalTitle"></h2>
-    <div id="modalTrailer"></div>
-    <div id="modalDownloads">
-      <h4>Download Links:</h4>
-      <ul id="downloadList"></ul>
-    </div>
-  </div>
+<!-- Desktop Banner (728x90) -->
+<div class="ad-desktop">
+  <script type="text/javascript">
+    atOptions = {
+      'key': 'c10e70aae6981f6f2aa504d8161c413e',
+      'format': 'iframe',
+      'height': 90,
+      'width': 728,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/c10e70aae6981f6f2aa504d8161c413e/invoke.js"></script>
 </div>
-<!-- Contact Us Modal -->
-<div id="contactModal" class="contact-modal">
-  <div class="contact-modal-content">
-    <button id="closeContact" class="closeContact">&times;</button>
-    <h2>Contact Us</h2>
-    <form id="contactForm">
-      <input type="email" id="contactEmail" placeholder="Your Email" required />
-      <textarea id="contactMessage" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </div>
+
+<!-- Tablet Banner (468x60) -->
+<div class="ad-tablet">
+  <script type="text/javascript">
+    atOptions = {
+      'key': '23abe0a621be4ea8ad3e6d90e5dea64d',
+      'format': 'iframe',
+      'height': 60,
+      'width': 468,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/23abe0a621be4ea8ad3e6d90e5dea64d/invoke.js"></script>
 </div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  doc,
-  updateDoc,
-} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyCJOb0p6KHwNXCFddQJJ1vk09oqozQjvNw",
-  authDomain: "jahkid6i-e51aa.firebaseapp.com",
-  projectId: "jahkid6i-e51aa",
-  storageBucket: "jahkid6i-e51aa.appspot.com",
-  messagingSenderId: "849738273147",
-  appId: "1:849738273147:web:bff891dd76502870a36dde",
-  measurementId: "G-70QFFJZWKQ",
-};
+<!-- Mobile Banner (320x50) -->
+<div class="ad-mobile">
+  <script type="text/javascript">
+    atOptions = {
+      'key': '748ee82beb1358313ab2124c782e22ae',
+      'format': 'iframe',
+      'height': 50,
+      'width': 320,
+      'params': {}
+    };
+  </script>
+  <script type="text/javascript" src="//frozenbiopsyskate.com/748ee82beb1358313ab2124c782e22ae/invoke.js"></script>
+</div>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<style>
+  /* Hide all ads */
+  .ad-desktop, .ad-tablet, .ad-mobile {
+    display: none;
+    justify-content: center;
+    margin: 15px 0;
+  }
 
-// Elements
-const searchInput = document.getElementById("searchInput");
-const contentGrid = document.getElementById("contentGrid");
+  /* Desktop (large screens) */
+  @media (min-width: 1025px) {
+    .ad-desktop { display: flex; }
+  }
 
-const tabTrending = document.getElementById("tabTrending");
-const tabRecent = document.getElementById("tabRecent");
+  /* Tablet screens */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .ad-tablet { display: flex; }
+  }
 
-const modal = document.getElementById("modal");
-const modalClose = document.getElementById("modalClose");
-const modalTitle = document.getElementById("modalTitle");
-const modalTrailer = document.getElementById("modalTrailer");
-const downloadList = document.getElementById("downloadList");
+  /* Mobile devices */
+  @media (max-width: 768px) {
+    .ad-mobile { display: flex; }
+  }
+</style>
 
-let mediaData = [];
-let filteredData = [];
-let currentTab = "trending";
-const ninetyTwoHoursMs = 92 * 60 * 60 * 1000;
+<div id="genreFilters">
+  <button data-genre="All" class="genreBtn active">All</button>
+  <button data-genre="Action" class="genreBtn">Action</button>
+  <button data-genre="Drama" class="genreBtn">Drama</button>
+  <button data-genre="History" class="genreBtn">History</button>
+  <button data-genre="Horror" class="genreBtn">Horror</button>
+  <button data-genre="Romance" class="genreBtn">Romance</button>
+  <button data-genre="Crime" class="genreBtn">Crime</button>
+  <button data-genre="Thriller" class="genreBtn">Thriller</button>
+  <button data-genre="Comedy" class="genreBtn">Comedy</button>
+  <button data-genre="Adventure" class="genreBtn">Adventure</button>
+  <button data-genre="Mystery" class="genreBtn">Mystery</button>
+  <button data-genre="Animation" class="genreBtn">Animation</button>
+</div>
 
-// --- Load media from Firestore ---
-function subscribeMedia() {
-  const mediaRef = collection(db, "media");
-  const q = query(mediaRef, orderBy("timestamp", "desc"));
-  onSnapshot(q, (snapshot) => {
-    mediaData = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      timestamp: doc.data().timestamp?.toDate?.() || new Date(0),
-      downloads: doc.data().downloads || 0,
-    }));
-    filterAndRender();
-  });
-}
+<div id="contentGrid" aria-live="polite" aria-label="Content List">
+  <!-- Cards go here -->
+</div>
 
-// --- Filter & Render ---
-function filterAndRender() {
-  const searchVal = searchInput.value.trim().toLowerCase();
-  filteredData = mediaData.filter((m) => {
-    const match = m.title.toLowerCase().includes(searchVal);
-    if (!match) return false;
+  </main>  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import {
+      getFirestore, collection, query, orderBy, onSnapshot
+    } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-    if (currentTab === "recent") {
-      const limit = new Date(Date.now() - ninetyTwoHoursMs);
-      return m.timestamp >= limit;
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJOb0p6KHwNXCFddQJJ1vk09oqozQjvNw",
+      authDomain: "jahkid6i-e51aa.firebaseapp.com",
+      projectId: "jahkid6i-e51aa",
+      storageBucket: "jahkid6i-e51aa.appspot.com",
+      messagingSenderId: "849738273147",
+      appId: "1:849738273147:web:bff891dd76502870a36dde"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const searchInput = document.getElementById("searchInput");
+    const contentGrid = document.getElementById("contentGrid");
+    const tabTrending = document.getElementById("tabTrending");
+    const tabRecent = document.getElementById("tabRecent");
+    const filterAll = document.getElementById("filterAll");
+    const filterMovies = document.getElementById("filterMovies");
+    const filterSeries = document.getElementById("filterSeries");
+    const filterMusic = document.getElementById("filterMusic");
+
+    const genreFilters = document.getElementById("genreFilters");
+
+    let mediaData = [];
+    let currentTab = "trending";
+    let currentTypeFilter = "all"; // all, movie, series, music
+    let currentGenre = "All";
+    const ninetyTwoHoursMs = 92 * 60 * 60 * 1000;
+
+    function subscribeMedia() {
+      const mediaRef = collection(db, "media");
+      const q = query(mediaRef, orderBy("timestamp", "desc"));
+      onSnapshot(q, (snapshot) => {
+        mediaData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          timestamp: doc.data().timestamp?.toDate?.() || new Date(0),
+          downloads: doc.data().downloads || "x"
+        }));
+        filterAndRender();
+      });
     }
-    return true;
-  });
 
-  if (currentTab === "trending") {
-    filteredData.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-  } else {
-    filteredData.sort((a, b) => b.timestamp - a.timestamp);
-  }
-
-  renderGrid(filteredData);
-}
-
-// --- Render Media Cards ---
-function renderGrid(list) {
-  contentGrid.innerHTML = "";
-  if (list.length === 0) {
-    contentGrid.innerHTML = `<p style="color:#aaa; text-align:center;">Refresh to load.</p>`;
-    return;
-  }
-
-  list.forEach((item) => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const img = document.createElement("img");
-    img.src = item.posterUrl || "https://via.placeholder.com/300x450?text=No+Image";
-    img.alt = item.title;
-
-    const content = document.createElement("div");
-    content.className = "card-content";
-
-    const title = document.createElement("h3");
-    title.className = "card-title";
-    title.textContent = item.title;
-
-    const type = document.createElement("p");
-    type.className = "card-type";
-    type.textContent = item.type.charAt(0).toUpperCase() + item.type.slice(1);
-
-    const btn = document.createElement("button");
-    btn.className = "btn-download";
-    btn.textContent = "Download here";
-    btn.addEventListener("click", async () => await openModal(item));
-
-    content.append(title, type, btn);
-    card.append(img, content);
-    contentGrid.appendChild(card);
-  });
-}
-
-// --- Open Modal ---
-async function openModal(item) {
-  modalTitle.textContent = item.title;
-  modalTrailer.innerHTML = "";
-
-  // Fetch YouTube trailer if not present
-  let trailerUrl = item.trailer;
-  if (!trailerUrl) {
-    const videoId = await fetchYouTubeTrailer(item.title);
-    trailerUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : null;
-  }
-
-  if (trailerUrl) {
-    const iframe = document.createElement("iframe");
-    iframe.src = trailerUrl;
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    iframe.allowFullscreen = true;
-    modalTrailer.appendChild(iframe);
-  } else {
-    modalTrailer.textContent = "No trailer available.";
-  }
-
-  // Downloads
-  downloadList.innerHTML = "";
-  if (item.type === "movie" && Array.isArray(item.urls)) {
-    item.urls.forEach((url, i) => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = url;
-      a.target = "_blank";
-      a.textContent = `Download Link ${i + 1}`;
-      a.addEventListener("click", () => incrementDownloadCount(item.id));
-      li.appendChild(a);
-      downloadList.appendChild(li);
-    });
-  } else if (item.type === "series" && Array.isArray(item.seasons)) {
-    item.seasons.forEach((seasonObj, i) => {
-      const header = document.createElement("li");
-      header.textContent = `▶️ Season ${seasonObj.season || i + 1}`;
-      header.style.fontWeight = "700";
-      header.style.marginTop = "0.5rem";
-      header.style.cursor = "pointer";
-
-      const container = document.createElement("ul");
-      container.style.marginLeft = "1rem";
-      container.style.display = "none";
-
-      header.addEventListener("click", () => {
-        container.style.display = container.style.display === "none" ? "block" : "none";
+    function filterAndRender() {
+      const searchVal = searchInput.value.trim().toLowerCase();
+      let filtered = mediaData.filter(m => {
+        const matchesTitle = m.title.toLowerCase().includes(searchVal);
+        const matchesType = currentTypeFilter === "all" || m.type === currentTypeFilter;
+        const matchesGenre = currentTypeFilter === "music" || currentGenre === "All" || m.genre?.toLowerCase() === currentGenre.toLowerCase();
+        return matchesTitle && matchesType && matchesGenre;
       });
 
-      seasonObj.episodes.forEach((ep, j) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = ep;
-        a.target = "_blank";
-        a.textContent = `Download Episode ${j + 1}`;
-        a.addEventListener("click", () => incrementDownloadCount(item.id));
-        li.appendChild(a);
-        container.appendChild(li);
+      if (currentTab === "recent") {
+        const cutoff = new Date(Date.now() - ninetyTwoHoursMs);
+        filtered = filtered.filter(m => m.timestamp >= cutoff);
+        filtered.sort((a, b) => b.timestamp - a.timestamp);
+      } else {
+        filtered.sort((a, b) => b.downloads - a.downloads);
+      }
+
+      renderGrid(filtered);
+    }
+
+    function renderGrid(list) {
+      contentGrid.innerHTML = list.length ? "" : `<p style='color:#aaa; text-align:center;'>Nothing found.</p>`;
+      list.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.addEventListener("click", () => {
+  if (item.type === "music") {
+    window.location.href = `music.html?id=${item.id}`;
+  } else {
+    window.location.href = `watch.html?id=${item.id}`;
+  }
+});
+        
+
+        const img = document.createElement("img");
+        img.src = item.posterUrl || "https://via.placeholder.com/300x450?text=No+Image";
+        img.alt = item.title;
+
+        const content = document.createElement("div");
+        content.className = "card-content";
+
+        const title = document.createElement("h3");
+        title.className = "card-title";
+        title.textContent = item.title;
+
+        const type = document.createElement("p");
+        type.className = "card-type";
+        type.textContent = `${item.type.charAt(0).toUpperCase() + item.type.slice(1)} • ${item.genre || 'Unknown Genre'}`;
+
+        const count = document.createElement("p");
+        count.className = "downloads";
+        count.textContent = `${item.downloads} downloads`;
+
+        content.append(title, type, count);
+        card.append(img, content);
+        contentGrid.appendChild(card);
       });
+    }
 
-      downloadList.appendChild(header);
-      downloadList.appendChild(container);
-    });
-  } else {
-    const li = document.createElement("li");
-    li.textContent = "No download links available.";
-    downloadList.appendChild(li);
-  }
-
-  modal.style.display = "flex";
-}
-
-// --- YouTube Trailer Fetch ---
-async function fetchYouTubeTrailer(title) {
-  const apiKey = "AIzaSyDSe0mAeQHwvtY1M_rufR7Hl_uiQ7kbnuI";
-  const query = encodeURIComponent(`${title} official trailer`);
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${query}&key=${apiKey}`;
-
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.items?.[0]?.id?.videoId || null;
-  } catch (err) {
-    console.error("YouTube fetch error:", err);
-    return null;
-  }
-}
-
-// --- Increment Downloads ---
-async function incrementDownloadCount(id) {
-  try {
-    const docRef = doc(db, "media", id);
-    const item = mediaData.find((m) => m.id === id);
-    const newCount = (item.downloads || 0) + 1;
-    await updateDoc(docRef, { downloads: newCount });
-    item.downloads = newCount;
-    filterAndRender();
-  } catch (e) {
-    console.error("Failed to update count", e);
-  }
-}
-
-// --- Event Listeners ---
-modalClose.addEventListener("click", () => {
-  modal.style.display = "none";
-  modalTrailer.innerHTML = "";
-  downloadList.innerHTML = "";
-});
-
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-    modalTrailer.innerHTML = "";
-    downloadList.innerHTML = "";
-  }
-});
-
-tabTrending.addEventListener("click", () => {
-  currentTab = "trending";
-  tabTrending.classList.add("active");
-  tabRecent.classList.remove("active");
-  filterAndRender();
-});
-
-tabRecent.addEventListener("click", () => {
-  currentTab = "recent";
-  tabRecent.classList.add("active");
-  tabTrending.classList.remove("active");
-  filterAndRender();
-});
-
-searchInput.addEventListener("input", filterAndRender);
-
-// --- Load Media Initially ---
-subscribeMedia();
-const menuToggle = document.getElementById("menuToggle");
-const nav = document.querySelector("header nav");
-
-menuToggle.addEventListener("click", () => {
-  nav.classList.toggle("active");
-  menuToggle.textContent = nav.classList.contains("active") ? "✖" : "☰";
-});
-
-import {
-  addDoc,
-  collection as firestoreCollection,
-} from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-// Contact modal elements
-const openContact = document.getElementById("openContact");
-const contactModal = document.getElementById("contactModal");
-const closeContact = document.getElementById("closeContact");
-const contactForm = document.getElementById("contactForm");
-const contactEmail = document.getElementById("contactEmail");
-const contactMessage = document.getElementById("contactMessage");
-
-// Open modal
-openContact.addEventListener("click", (e) => {
-  e.preventDefault();
-  contactModal.style.display = "flex";
-});
-
-// Close modal
-closeContact.addEventListener("click", () => {
-  contactModal.style.display = "none";
-  contactForm.reset();
-});
-
-contactModal.addEventListener("click", (e) => {
-  if (e.target === contactModal) {
-    contactModal.style.display = "none";
-    contactForm.reset();
-  }
-});
-
-// Submit form
-contactForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const email = contactEmail.value.trim();
-  const message = contactMessage.value.trim();
-
-  if (!email || !message) return alert("Please fill all fields.");
-
-  try {
-    await addDoc(firestoreCollection(db, "messages"), {
-      email,
-      message,
-      timestamp: new Date(),
+    document.querySelectorAll(".genreBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".genreBtn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentGenre = btn.getAttribute("data-genre");
+        filterAndRender();
+      });
     });
 
-    alert("Message sent!");
-    contactModal.style.display = "none";
-    contactForm.reset();
-  } catch (err) {
-    console.error("Message failed:", err);
-    alert("Something went wrong. Try again.");
-  }
-});
+    tabTrending.addEventListener("click", () => {
+      currentTab = "trending";
+      tabTrending.classList.add("active");
+      tabRecent.classList.remove("active");
+      filterAndRender();
+    });
 
-  // Theme Toggle
-const themeToggle = document.getElementById("themeToggle");
-const userPref = localStorage.getItem("theme");
+    tabRecent.addEventListener("click", () => {
+      currentTab = "recent";
+      tabRecent.classList.add("active");
+      tabTrending.classList.remove("active");
+      filterAndRender();
+    });
 
-if (userPref === "dark") {
-  document.body.setAttribute("data-theme", "dark");
-  themeToggle.textContent = "☀️";
-}
+    filterAll.addEventListener("click", (e) => {
+      e.preventDefault();
+      currentTypeFilter = "all";
+      genreFilters.style.display = "flex";
+      filterAndRender();
+    });
 
-themeToggle.addEventListener("click", () => {
-  const currentTheme = document.body.getAttribute("data-theme");
-  if (currentTheme === "dark") {
-    document.body.removeAttribute("data-theme");
-    localStorage.setItem("theme", "light");
-    themeToggle.textContent = "🌙";
-  } else {
-    document.body.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-    themeToggle.textContent = "☀️";
-  }
-});
-</script>
+    filterMovies.addEventListener("click", (e) => {
+      e.preventDefault();
+      currentTypeFilter = "movie";
+      genreFilters.style.display = "flex";
+      filterAndRender();
+    });
 
-<!-- Adsterra Popunder -->
-<script type='text/javascript' src='//pl27090726.profitableratecpm.com/e7/78/1d/e7781d27f149e0d26a98ff897ec7d868.js'></script>
-</body>
-</html>
- 
+    filterSeries.addEventListener("click", (e) => {
+      e.preventDefault();
+      currentTypeFilter = "series";
+      genreFilters.style.display = "flex";
+      filterAndRender();
+    });
+
+    filterMusic.addEventListener("click", (e) => {
+      e.preventDefault();
+      currentTypeFilter = "music";
+      genreFilters.style.display = "none";
+      filterAndRender();
+    });
+
+    searchInput.addEventListener("input", filterAndRender);
+    subscribeMedia();
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      menuToggle.textContent = navLinks.classList.contains("active") ? "✖" : "☰";
+    });
+
+    document.querySelectorAll("#navLinks a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+        menuToggle.textContent = "☰";
+      });
+    });
+  </script>
+  <script type='text/javascript' src='//frozenbiopsyskate.com/eb/a8/04/eba804afa89e38e05f25507c6d76c9f1.js'></script>
+  </body>
+   </html>
